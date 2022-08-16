@@ -108,11 +108,13 @@ void accept_handle(int epfd, int sfd) {
     infd = accept4(sfd, &in_addr, &in_len, SOCK_NONBLOCK | SOCK_CLOEXEC);
     if (infd == -1) {
       printf("accep error:%s errno:%d\n", strerror(errno), errno);
+      // no EINTR because listened fd is non-blocking.
       if ((errno == EAGAIN) || (errno == EWOULDBLOCK)) {
+        // linux EAGAIN (11)
         break;  // We have processed all incoming connections.
       } else {
         perror("accept");
-        break;
+        continue;
       }
     }
 
@@ -187,6 +189,9 @@ void event_loop(int epfd, int sfd, processor::RingBuffer<event_data>* ring_buffe
           if (count == -1) {
             // EAGAIN or EWOULDBLOCK means we have no more data that can be read.
             // Everything else is a real error.
+            if (errno == EINTR) {
+              continue;  // just retry
+            }
             if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
               perror("read");
               should_close = true;
