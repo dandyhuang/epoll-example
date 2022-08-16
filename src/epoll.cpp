@@ -166,50 +166,12 @@ void event_loop(int epfd, int sfd, processor::RingBuffer<event_data>* ring_buffe
         // We have a notification on the listening socket, which means one or more incoming
         // connections.
         accept_handle(epfd, sfd);
-        // while (true) {
-        //   struct sockaddr in_addr;
-        //   socklen_t in_len;
-        //   int infd;
-        //   char hbuf[NI_MAXHOST], sbuf[NI_MAXSERV];
-
-        //   in_len = sizeof in_addr;
-        //   // No need to make these sockets non blocking since accept4() takes care of it.
-        //   infd = accept4(sfd, &in_addr, &in_len, SOCK_NONBLOCK | SOCK_CLOEXEC);
-        //   if (infd == -1) {
-        //     if ((errno == EAGAIN) || (errno == EWOULDBLOCK)) {
-        //       break;  // We have processed all incoming connections.
-        //     } else {
-        //       perror("accept");
-        //       break;
-        //     }
-        //   }
-
-        //   // Print host and service info.
-        //   retval = getnameinfo(&in_addr, in_len, hbuf, sizeof hbuf, sbuf, sizeof sbuf,
-        //                        NI_NUMERICHOST | NI_NUMERICSERV);
-        //   if (retval == 0) {
-        //     printf("Accepted connection on descriptor %d (host=%s, port=%s)\n", infd, hbuf,
-        //     sbuf);
-        //   }
-
-        //   // Register the new FD to be monitored by epoll.
-        //   event.data.fd = infd;
-        //   // Register for read events, disconnection events and enable edge triggered behavior
-        //   for
-        //   // the FD.
-        //   event.events = EPOLLIN | EPOLLRDHUP | EPOLLET;
-        //   retval = epoll_ctl(epfd, EPOLL_CTL_ADD, infd, &event);
-        //   if (retval == -1) {
-        //     perror("epoll_ctl");
-        //     abort();
-        //   }
-        // }
       } else {
         // We have data on the fd waiting to be read. Read and  display it.
         // We must read whatever data is available completely, as we are running in edge-triggered
         // mode and won't get a notification again for the same data.
         bool should_close = false, done = false;
-
+        ssize_t num = 0;
         while (!done) {
           ssize_t count;
           // Get the next ring buffer entry.
@@ -244,7 +206,7 @@ void event_loop(int epfd, int sfd, processor::RingBuffer<event_data>* ring_buffe
             // split and rearrange the packets across epoll signal boundaries at the server.
             bool stop = (strncmp(entry->buffer, "exit", 4) == 0);
             entry->stop = stop;
-
+            printf("read ok num:%d\n", num++);
             // Publish the ring buffer entry since all is well.
             ring_buffer->publish(next_write_index);
             if (stop) goto exit_loop;
