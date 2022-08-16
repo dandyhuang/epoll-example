@@ -118,7 +118,7 @@ void accept_handle(int epfd, int sfd) {
 
     // Print host and service info.
     int retval = getnameinfo(&in_addr, in_len, hbuf, sizeof hbuf, sbuf, sizeof sbuf,
-                         NI_NUMERICHOST | NI_NUMERICSERV);
+                             NI_NUMERICHOST | NI_NUMERICSERV);
     if (retval == 0) {
       printf("Accepted connection on descriptor %d (host=%s, port=%s)\n", infd, hbuf, sbuf);
     }
@@ -188,12 +188,14 @@ void event_loop(int epfd, int sfd, processor::RingBuffer<event_data>* ring_buffe
         //   retval = getnameinfo(&in_addr, in_len, hbuf, sizeof hbuf, sbuf, sizeof sbuf,
         //                        NI_NUMERICHOST | NI_NUMERICSERV);
         //   if (retval == 0) {
-        //     printf("Accepted connection on descriptor %d (host=%s, port=%s)\n", infd, hbuf, sbuf);
+        //     printf("Accepted connection on descriptor %d (host=%s, port=%s)\n", infd, hbuf,
+        //     sbuf);
         //   }
 
         //   // Register the new FD to be monitored by epoll.
         //   event.data.fd = infd;
-        //   // Register for read events, disconnection events and enable edge triggered behavior for
+        //   // Register for read events, disconnection events and enable edge triggered behavior
+        //   for
         //   // the FD.
         //   event.events = EPOLLIN | EPOLLRDHUP | EPOLLET;
         //   retval = epoll_ctl(epfd, EPOLL_CTL_ADD, infd, &event);
@@ -227,13 +229,14 @@ void event_loop(int epfd, int sfd, processor::RingBuffer<event_data>* ring_buffe
               perror("read");
               should_close = true;
             }
-            printf("EAGAIN errno = %d, count = %d\n", errno, count) done = true;
+            printf("EAGAIN errno = %d, count = %d\n", errno, count);
+            done = true;
           } else if (count == 0) {
             // Technically we don't need to handle this here, since we wait for EPOLLRDHUP. We
             // handle it just to be sure. End of file. The remote has closed the connection.
             should_close = true;
             done = true;
-            printf("close fd = %d\n", entry->fd)
+            printf("close fd = %d\n", entry->fd);
           } else {
             // Valid data. Process it.
             // Check if the client want's the server to exit.
