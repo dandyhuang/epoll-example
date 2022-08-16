@@ -190,6 +190,7 @@ void event_loop(int epfd, int sfd, processor::RingBuffer<event_data>* ring_buffe
             // EAGAIN or EWOULDBLOCK means we have no more data that can be read.
             // Everything else is a real error.
             if (errno == EINTR) {
+              printf("ssss enter\n")
               continue;  // just retry
             }
             if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
