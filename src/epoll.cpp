@@ -71,7 +71,7 @@ int process_messages(processor::RingBuffer<event_data>* ring_buffer) {
       s = write(1, buffer, buffer_length);
       if (s == -1) {
         perror("write");
-        abort();
+        // abort();
       }
 
       // Then reverse it and echo it back.
@@ -79,7 +79,7 @@ int process_messages(processor::RingBuffer<event_data>* ring_buffer) {
       s = write(client_fd, buffer, buffer_length);
       if (s == -1) {
         perror("echo");
-        abort();
+        // abort();
       }
       // We are not checking to see if all the bytes have been written.
       // In case they are not written we must use our own epoll loop, express write interest
