@@ -107,7 +107,7 @@ void accept_handle(int epfd, int sfd) {
     // No need to make these sockets non blocking since accept4() takes care of it.
     infd = accept4(sfd, &in_addr, &in_len, SOCK_NONBLOCK | SOCK_CLOEXEC);
     if (infd == -1) {
-      printf("accep error:%s errno:%d", strerror(errno), errno);
+      printf("accep error:%s errno:%d\n", strerror(errno), errno);
       if ((errno == EAGAIN) || (errno == EWOULDBLOCK)) {
         break;  // We have processed all incoming connections.
       } else {
