@@ -40,6 +40,7 @@ Logger::Logger()
 {
     PR_DEBUG("log class constructed\n");
     l_count = 0;
+    is_thread_stop.store(false, std::memory_order_relaxed);
 }
 
 Logger::~Logger()

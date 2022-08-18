@@ -90,7 +90,7 @@ private:
     buffer_queue<string> *l_buffer_queue = nullptr;
     bool l_is_async; 
     bool l_is_stdout = false;
-    atomic<bool> is_thread_stop = false;
+    atomic<bool> is_thread_stop;
     mutex l_mutex;              // TODO: add mutexes for different critical resources
     thread *l_asyncw_thread = nullptr;
 };
