@@ -44,7 +44,7 @@ public:
     period_cls(const period_cls&){}
     period_cls(period_cls&&){}
 private:
-    atomic<int> period_cls_cnt = std::atomic<int>(0);
+    atomic<int> period_cls_cnt = {0};
 };
 
 void test_timer() {
