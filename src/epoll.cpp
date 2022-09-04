@@ -176,6 +176,7 @@ void event_loop(int epfd, int sfd, processor::RingBuffer<event_data>* ring_buffe
         ssize_t num = 0;
         while (!done) {
           ssize_t count;
+          printf("current event fd:%d", current_event.data.fd);
           // Get the next ring buffer entry.
           auto next_write_index = ring_buffer->nextProducerSequence();
           auto entry = ring_buffer->get(next_write_index);

@@ -1,6 +1,11 @@
 {
 	"commentTranslate.targetLanguage": "zh-CN",
 	"files.associations": {
-		"atomic": "cpp"
-	}
+		"atomic": "cpp",
+		"thread": "cpp",
+		"__threading_support": "cpp",
+		"chrono": "cpp",
+		"iosfwd": "cpp"
+	},
+	"cmake.sourceDirectory": "${workspaceFolder}/log"
 }

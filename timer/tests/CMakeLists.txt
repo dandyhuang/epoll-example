@@ -1,3 +1,5 @@
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -g")
 set(SRCS
     test_timer.cpp
     ../../log/pr.cpp
